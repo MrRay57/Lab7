@@ -181,6 +181,9 @@ public class CommandManager {
         if (movie == null) {
             return new Response(ResponseStatus.ERROR, "Объект фильма не передан.");
         }
+        if (!movie.validate()) {
+            return new Response(ResponseStatus.ERROR, "Невалидные данные фильма.");
+        }
 
         Long key = Long.parseLong(argument.trim());
 
@@ -202,6 +205,9 @@ public class CommandManager {
         }
         if (movie == null) {
             return new Response(ResponseStatus.ERROR, "Объект фильма не передан.");
+        }
+        if (!movie.validate()) {
+            return new Response(ResponseStatus.ERROR, "Невалидные данные фильма.");
         }
 
         Long id = Long.parseLong(argument.trim());
@@ -261,6 +267,9 @@ public class CommandManager {
         if (compareMovie == null) {
             return new Response(ResponseStatus.ERROR, "Объект для сравнения не передан.");
         }
+        if (!compareMovie.validate()) {
+            return new Response(ResponseStatus.ERROR, "Невалидные данные фильма для сравнения.");
+        }
 
         List<Long> keysToRemove = collectionManager.getKeysLowerThan(compareMovie, ownerLogin);
 
@@ -268,13 +277,16 @@ public class CommandManager {
             return new Response(ResponseStatus.OK, "Нет ваших элементов, меньших заданного.");
         }
 
+        List<Long> actuallyRemoved = new ArrayList<>();
         for (Long key : keysToRemove) {
-            movieRepository.deleteByKey(key, ownerLogin);
+            if (movieRepository.deleteByKey(key, ownerLogin)) {
+                actuallyRemoved.add(key);
+            }
         }
-        collectionManager.removeLowerFromMemory(keysToRemove);
+        collectionManager.removeLowerFromMemory(actuallyRemoved);
 
         return new Response(ResponseStatus.OK,
-                "Удалено " + keysToRemove.size() + " ваших элементов, меньших заданного.");
+                "Удалено " + actuallyRemoved.size() + " ваших элементов, меньших заданного.");
     }
 
     private Response handleReplaceIfGreater(String argument, Movie newMovie, String ownerLogin) throws SQLException {
@@ -283,6 +295,9 @@ public class CommandManager {
         }
         if (newMovie == null) {
             return new Response(ResponseStatus.ERROR, "Объект фильма не передан.");
+        }
+        if (!newMovie.validate()) {
+            return new Response(ResponseStatus.ERROR, "Невалидные данные фильма.");
         }
 
         Long key = Long.parseLong(argument.trim());
@@ -318,6 +333,9 @@ public class CommandManager {
         }
         if (newMovie == null) {
             return new Response(ResponseStatus.ERROR, "Объект фильма не передан.");
+        }
+        if (!newMovie.validate()) {
+            return new Response(ResponseStatus.ERROR, "Невалидные данные фильма.");
         }
 
         Long key = Long.parseLong(argument.trim());

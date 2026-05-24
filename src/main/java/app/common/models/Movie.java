@@ -90,7 +90,7 @@ public class Movie implements Validatable, Comparable<Movie> {
             return false;
         if (oscarsCount <= 0)
             return false;
-        if (totalBoxOffice == null || totalBoxOffice <= 0)
+        if (totalBoxOffice == null || totalBoxOffice <= 0 || Float.isNaN(totalBoxOffice) || Float.isInfinite(totalBoxOffice))
             return false;
         if (length <= 0)
             return false;
@@ -101,9 +101,17 @@ public class Movie implements Validatable, Comparable<Movie> {
 
     @Override
     public int compareTo(Movie other) {
-        int nameCompare = this.name.compareTo(other.name);
-        if (nameCompare != 0) {
-            return nameCompare;
+        if (this.name == null && other.name == null) {
+            // если оба null, продолжаем сравнение по id
+        } else if (this.name == null) {
+            return -1;
+        } else if (other.name == null) {
+            return 1;
+        } else {
+            int nameCompare = this.name.compareTo(other.name);
+            if (nameCompare != 0) {
+                return nameCompare;
+            }
         }
 
         if (this.id == null && other.id == null)

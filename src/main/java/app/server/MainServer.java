@@ -22,10 +22,10 @@ import java.util.TreeMap;
 
 public class MainServer {
     private static final Logger logger = LoggerFactory.getLogger(MainServer.class);
-    private static final int PORT = 8080;
 
     private static final String DEFAULT_DB_HOST = "pg";
     private static final String DEFAULT_DB_NAME = "studs";
+    private static final int DEFAULT_PORT = 8080;
 
     public static void main(String[] args) {
         logger.info("Инициализация серверного приложения...");
@@ -34,11 +34,12 @@ public class MainServer {
         String dbName = getParam(args, 1, "DB_NAME", DEFAULT_DB_NAME);
         String dbUser = getParam(args, 2, "DB_USER", null);
         String dbPassword = getParam(args, 3, "DB_PASSWORD", null);
+        int port = parsePort(getParam(args, 4, "PORT", String.valueOf(DEFAULT_PORT)));
 
         if (dbUser == null || dbUser.isEmpty()) {
             logger.error("Не указан пользователь БД. Передайте через аргументы или переменную DB_USER.");
-            System.err.println("Использование: java -jar Server.jar [db_host] [db_name] [db_user] [db_password]");
-            System.err.println("Или через переменные окружения: DB_HOST, DB_NAME, DB_USER, DB_PASSWORD");
+            System.err.println("Использование: java -jar Server.jar [db_host] [db_name] [db_user] [db_password] [port]");
+            System.err.println("Или через переменные окружения: DB_HOST, DB_NAME, DB_USER, DB_PASSWORD, PORT");
             System.exit(1);
         }
         if (dbPassword == null) {
@@ -71,7 +72,7 @@ public class MainServer {
         }
 
         CommandManager commandManager = new CommandManager(collectionManager, authManager, movieRepository);
-        UDPServer udpServer = new UDPServer(PORT);
+        UDPServer udpServer = new UDPServer(port);
         udpServer.setCommandManager(commandManager);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -83,7 +84,7 @@ public class MainServer {
             udpServer.start();
             logger.info("Сервер готов. Консольные команды: exit");
         } catch (Exception e) {
-            logger.error("Не удалось запустить сервер на порту {}: {}", PORT, e.getMessage());
+            logger.error("Не удалось запустить сервер на порту {}: {}", port, e.getMessage());
             System.exit(1);
         }
 
@@ -124,5 +125,19 @@ public class MainServer {
             return envValue;
         }
         return defaultValue;
+    }
+
+    private static int parsePort(String value) {
+        try {
+            int p = Integer.parseInt(value);
+            if (p < 1 || p > 65535) {
+                logger.warn("Некорректный порт {}, используется {}", p, DEFAULT_PORT);
+                return DEFAULT_PORT;
+            }
+            return p;
+        } catch (NumberFormatException e) {
+            logger.warn("Не удалось разобрать порт '{}', используется {}", value, DEFAULT_PORT);
+            return DEFAULT_PORT;
+        }
     }
 }

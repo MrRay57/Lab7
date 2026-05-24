@@ -24,6 +24,7 @@ public class Coordinates implements Validatable {
     public boolean validate() {
         if (x == null) return false;
         if (x > 626) return false;
+        if (Double.isNaN(y) || Double.isInfinite(y)) return false;
         return true;
     }
 

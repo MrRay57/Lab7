@@ -71,9 +71,9 @@ public class MovieBuilder {
         while (true) {
             if (isInteractive()) System.out.print(message);
             String input = inputManager.readLine();
-            if (input == null || input.isEmpty()) {
+            if (input == null || input.trim().isEmpty()) {
                 if (canBeNull) return null;
-                printError("Строка не может быть пустой! Попробуйте снова.");
+                printError("Строка не может быть пустой или состоять только из пробелов! Попробуйте снова.");
                 continue;
             }
             return input;
@@ -135,6 +135,10 @@ public class MovieBuilder {
             }
             try {
                 float value = Float.parseFloat(input);
+                if (Float.isNaN(value) || Float.isInfinite(value)) {
+                    printError("Значение не может быть NaN или Infinity!");
+                    continue;
+                }
                 if (value < min || value > max) {
                     printError("Значение вне допустимых границ!");
                     continue;
@@ -156,7 +160,12 @@ public class MovieBuilder {
                 continue;
             }
             try {
-                return Double.parseDouble(input);
+                double value = Double.parseDouble(input);
+                if (Double.isNaN(value) || Double.isInfinite(value)) {
+                    printError("Значение не может быть NaN или Infinity!");
+                    continue;
+                }
+                return value;
             } catch (NumberFormatException e) {
                 printError("Введите корректное дробное число (через точку)!");
             }

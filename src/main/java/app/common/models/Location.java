@@ -26,6 +26,7 @@ public class Location implements Validatable {
     @Override
     public boolean validate() {
         if (x == null) return false;
+        if (Float.isNaN(x) || Float.isInfinite(x)) return false;
         return true;
     }
 
