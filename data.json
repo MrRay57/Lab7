@@ -1,0 +1,40 @@
+{
+  "1": {
+    "id": 5,
+    "name": "qwer1111",
+    "coordinates": {
+      "x": 45,
+      "y": 35.0
+    },
+    "creationDate": "2026-03-29T22:43:28.240024+03:00[Europe/Moscow]",
+    "oscarsCount": 28,
+    "totalBoxOffice": 2312.0,
+    "length": 34324234,
+    "genre": "THRILLER"
+  },
+  "34": {
+    "id": 2,
+    "name": "23в23вцыв",
+    "coordinates": {
+      "x": 23,
+      "y": 23.0
+    },
+    "creationDate": "2026-03-15T19:32:59.065215+03:00[Europe/Moscow]",
+    "oscarsCount": 23,
+    "totalBoxOffice": 32.0,
+    "length": 23
+  },
+  "6568": {
+    "id": 4,
+    "name": "khlkhlkllll",
+    "coordinates": {
+      "x": 67,
+      "y": 6789.0
+    },
+    "creationDate": "2026-03-29T21:53:17.664843+03:00[Europe/Moscow]",
+    "oscarsCount": 98765,
+    "totalBoxOffice": 987654.0,
+    "length": 98765,
+    "genre": "DRAMA"
+  }
+}
