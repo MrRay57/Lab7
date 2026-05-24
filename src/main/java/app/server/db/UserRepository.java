@@ -8,6 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Репозиторий для взаимодействия с таблицей пользователей в базе данных
+ */
 public class UserRepository {
     private static final Logger logger = LoggerFactory.getLogger(UserRepository.class);
 

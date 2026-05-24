@@ -9,6 +9,9 @@ import app.client.network.UDPClient;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Главный класс клиентского приложения
+ */
 public class MainClient {
     private static final String HOST = "localhost";
     private static final int PORT = 8080;

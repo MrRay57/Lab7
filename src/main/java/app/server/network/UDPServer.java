@@ -15,6 +15,9 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.ForkJoinPool;
 
+/**
+ * Класс, реализующий UDP-сервер для обработки сетевых запросов
+ */
 public class UDPServer {
     private static final Logger logger = LoggerFactory.getLogger(UDPServer.class);
 

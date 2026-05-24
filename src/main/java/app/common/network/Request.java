@@ -2,6 +2,9 @@ package app.common.network;
 
 import java.io.Serializable;
 
+/**
+ * Класс, представляющий сетевой запрос от клиента к серверу
+ */
 public class Request implements Serializable {
     private static final long serialVersionUID = 2L;
 

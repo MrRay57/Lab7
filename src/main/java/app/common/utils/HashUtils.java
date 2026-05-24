@@ -4,6 +4,9 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Утилитарный класс для хеширования паролей
+ */
 public final class HashUtils {
     private HashUtils() {}
 

@@ -8,6 +8,9 @@ import app.common.utils.HashUtils;
 
 import java.util.Scanner;
 
+/**
+ * Клиентский менеджер для обработки регистрации и авторизации
+ */
 public class AuthClientManager {
     private final UDPClient client;
     private final Scanner scanner;

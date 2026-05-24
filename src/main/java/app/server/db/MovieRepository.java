@@ -10,6 +10,9 @@ import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Репозиторий для взаимодействия с таблицей фильмов в базе данных
+ */
 public class MovieRepository {
     private static final Logger logger = LoggerFactory.getLogger(MovieRepository.class);
 

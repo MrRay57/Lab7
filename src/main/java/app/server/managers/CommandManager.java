@@ -11,8 +11,13 @@ import org.slf4j.LoggerFactory;
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+/**
+ * Менеджер обработки и выполнения серверных команд
+ */
 public class CommandManager {
     private static final Logger logger = LoggerFactory.getLogger(CommandManager.class);
 
@@ -20,12 +25,36 @@ public class CommandManager {
     private final AuthManager authManager;
     private final MovieRepository movieRepository;
 
+    private final Map<String, CommandHandler> commands = new HashMap<>();
+
+    @FunctionalInterface
+    private interface CommandHandler {
+        Response execute(Request request) throws Exception;
+    }
+
     public CommandManager(CollectionManager collectionManager,
                           AuthManager authManager,
                           MovieRepository movieRepository) {
         this.collectionManager = collectionManager;
         this.authManager = authManager;
         this.movieRepository = movieRepository;
+        registerCommands();
+    }
+
+    private void registerCommands() {
+        commands.put("help", req -> handleHelp());
+        commands.put("info", req -> handleInfo());
+        commands.put("show", req -> handleShow());
+        commands.put("insert", req -> handleInsert(req.getStringArgument(), (Movie) req.getObjectArgument(), req.getLogin()));
+        commands.put("update", req -> handleUpdate(req.getStringArgument(), (Movie) req.getObjectArgument(), req.getLogin()));
+        commands.put("remove_key", req -> handleRemoveKey(req.getStringArgument(), req.getLogin()));
+        commands.put("clear", req -> handleClear(req.getLogin()));
+        commands.put("remove_lower", req -> handleRemoveLower((Movie) req.getObjectArgument(), req.getLogin()));
+        commands.put("replace_if_greater", req -> handleReplaceIfGreater(req.getStringArgument(), (Movie) req.getObjectArgument(), req.getLogin()));
+        commands.put("replace_if_lowe", req -> handleReplaceIfLowe(req.getStringArgument(), (Movie) req.getObjectArgument(), req.getLogin()));
+        commands.put("average_of_oscars_count", req -> handleAverageOscars());
+        commands.put("count_less_than_length", req -> handleCountLessThanLength(req.getStringArgument()));
+        commands.put("print_field_descending_length", req -> handlePrintFieldDescendingLength());
     }
 
     public Response execute(Request request) {
@@ -50,49 +79,12 @@ public class CommandManager {
                         "Ошибка авторизации. Проверьте логин и пароль.");
             }
 
-            switch (commandName) {
-                case "help":
-                    return handleHelp();
-
-                case "info":
-                    return handleInfo();
-
-                case "show":
-                    return handleShow();
-
-                case "insert":
-                    return handleInsert(argument, (Movie) request.getObjectArgument(), login);
-
-                case "update":
-                    return handleUpdate(argument, (Movie) request.getObjectArgument(), login);
-
-                case "remove_key":
-                    return handleRemoveKey(argument, login);
-
-                case "clear":
-                    return handleClear(login);
-
-                case "remove_lower":
-                    return handleRemoveLower((Movie) request.getObjectArgument(), login);
-
-                case "replace_if_greater":
-                    return handleReplaceIfGreater(argument, (Movie) request.getObjectArgument(), login);
-
-                case "replace_if_lowe":
-                    return handleReplaceIfLowe(argument, (Movie) request.getObjectArgument(), login);
-
-                case "average_of_oscars_count":
-                    return handleAverageOscars();
-
-                case "count_less_than_length":
-                    return handleCountLessThanLength(argument);
-
-                case "print_field_descending_length":
-                    return handlePrintFieldDescendingLength();
-
-                default:
-                    logger.warn("Получена неизвестная команда: '{}'", commandName);
-                    return new Response(ResponseStatus.ERROR, "Неизвестная команда: " + commandName);
+            CommandHandler handler = commands.get(commandName);
+            if (handler != null) {
+                return handler.execute(request);
+            } else {
+                logger.warn("Получена неизвестная команда: '{}'", commandName);
+                return new Response(ResponseStatus.ERROR, "Неизвестная команда: " + commandName);
             }
 
         } catch (NumberFormatException e) {

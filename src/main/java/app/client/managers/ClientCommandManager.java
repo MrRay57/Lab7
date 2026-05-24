@@ -13,6 +13,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+/**
+ * Менеджер для отправки команд от клиента к серверу
+ */
 public class ClientCommandManager {
     private final ApplicationInputManager inputManager;
     private final UDPClient client;

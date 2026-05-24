@@ -8,6 +8,9 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
+/**
+ * Менеджер для управления коллекцией элементов
+ */
 public class CollectionManager {
     private TreeMap<Long, Movie> collection;
     private final Map<Long, String> owners;

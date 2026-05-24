@@ -5,6 +5,9 @@ import app.server.db.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Менеджер для аутентификации и регистрации пользователей
+ */
 public class AuthManager {
     private static final Logger logger = LoggerFactory.getLogger(AuthManager.class);
 

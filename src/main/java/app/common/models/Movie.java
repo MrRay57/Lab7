@@ -102,7 +102,6 @@ public class Movie implements Validatable, Comparable<Movie> {
     @Override
     public int compareTo(Movie other) {
         if (this.name == null && other.name == null) {
-            // если оба null, продолжаем сравнение по id
         } else if (this.name == null) {
             return -1;
         } else if (other.name == null) {

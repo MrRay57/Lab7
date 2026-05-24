@@ -20,6 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Главный класс серверного приложения
+ */
 public class MainServer {
     private static final Logger logger = LoggerFactory.getLogger(MainServer.class);
 
